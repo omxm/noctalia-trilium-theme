@@ -1,0 +1,17 @@
+# Local notes and machine-specific files (never published)
+CLAUDE.md
+SETUP_LOG.md
+CURRENT_STATE.md
+*.ja.md
+screenshots/
+reference/
+hosts/*.conf
+.claude/
+
+# Backups and editor files
+*.bak
+*.bak-*
+*.swp
+*.swo
+*~
+.DS_Store

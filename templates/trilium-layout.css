@@ -1,0 +1,52 @@
+/*
+ * Noctalia -> Trilium theme, layout layer (Zen Browser style: only the editor floats as a rounded card)
+ *
+ * - No colors here. Colors come from the color layer's variables (--noctalia-base, --noctalia-card, ...).
+ * - push.sh appends this file after the color layer and pushes both to the theme note.
+ * - To turn it off: add LAYOUT=off to ~/.config/noctalia/trilium/machine.conf and run ./install.sh.
+ * - If a Trilium update breaks the layout, turn this off first. The color layer only overrides Next's variables
+ *   and is much less fragile.
+ * - Every selector starts at #trilium-app (= body) so it wins over Next's own rules.
+ */
+
+/* 1. Variables only (robust) */
+#trilium-app {
+    --noctalia-gap: 8px;
+    --noctalia-radius: 12px;
+
+    /* Everything except the card blends into the base */
+    --classic-toolbar-horiz-layout-background-color: var(--noctalia-base);
+    --classic-toolbar-vert-layout-background-color: var(--noctalia-base);
+    --right-pane-background-color: var(--noctalia-base);
+    --peek-button-expand-background-color: transparent;   /* the "<" button on the right edge that opens the right pane */
+
+    /* No borders; separate areas by brightness only */
+    --launcher-pane-horiz-border-color: transparent;
+    --status-bar-border-color: transparent;
+}
+
+/* 2. Selectors (depend on Trilium's DOM structure) */
+
+/* Turn the editor (.note-split) into a rounded card inset from the window edges.
+ * The right edge reuses the gutter Next's new layout keeps for the "<" button (--right-pane-peek-button-gutter);
+ * only the bottom inset is added here. */
+#trilium-app #vertical-main-container {
+    padding-bottom: var(--noctalia-gap);
+}
+
+#trilium-app #center-pane .note-split {
+    background-color: var(--noctalia-card);
+    border-color: transparent;
+    border-radius: var(--noctalia-radius);
+}
+
+/* Remove the line above the status bar (breadcrumbs). Next sets border-top directly, so no variable can do it */
+#trilium-app .status-bar > .status-bar-main-row {
+    border-top-color: transparent;
+}
+
+/* Switches that are on use primary (like Noctalia's toggles). Next sets these variables on the switch element itself */
+#trilium-app div.switch-widget {
+    --switch-on-track-background: var(--noctalia-accent);
+    --switch-on-thumb-background: var(--noctalia-on-accent);
+}

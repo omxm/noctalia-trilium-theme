@@ -1,0 +1,223 @@
+/*
+ * Noctalia -> Trilium theme, color layer (rendered by a Noctalia user template)
+ * mode: {{ mode }}
+ *
+ * Built on Trilium's Next theme (#appThemeBase=next-dark / next-light).
+ * Only CSS variables are overridden here; see docs/MAPPING.md for the mapping.
+ * The Next stylesheets load after this note, so everything goes on #trilium-app (= body) instead of :root.
+ */
+
+#trilium-app {
+    /* 0. Base, card and accent (the layout layer, trilium-layout.css, uses these too)
+     *    Matched against Noctalia's own UI (settings window, bar, control center; checked pixel by pixel):
+     *      window background / bar = surface, search field / tiles / unselected tabs = surface_variant,
+     *      selected item / page heading / switches that are on = primary (text on_primary).
+     *    Base = surface (tree, tab row, toolbar, status bar). Card = surface_variant (editor).
+     *    Note: in light mode surface_variant is slightly darker than surface, same as in Noctalia. */
+    --noctalia-base: {{ colors.surface.default.hex }};
+    --noctalia-card: {{ colors.surface_variant.default.hex }};
+    --noctalia-accent: {{ colors.primary.default.hex }};
+    --noctalia-on-accent: {{ colors.on_primary.default.hex }};
+
+    /* 1. Backgrounds (dark -> light) */
+    --left-pane-background-color: var(--noctalia-base);
+    --launcher-pane-horiz-background-color: var(--noctalia-base);
+    --launcher-pane-vert-background-color: var(--noctalia-base);
+    --launcher-pane-horiz-border-color: {{ colors.shadow.default.hex }};
+    --main-background-color: var(--noctalia-card);
+    --modal-background-color: {{ colors.surface_container.default.hex }};
+    --tool-dialog-background-color: {{ colors.surface_container.default.hex }};
+    --menu-background-color: {{ colors.surface_container.default.rgba | set_alpha 0.85 }};
+    --menu-background-color-no-backdrop: {{ colors.surface_container.default.hex }};
+    --board-column-background: {{ colors.surface_container.default.hex }};
+    --select-focus-background: {{ colors.surface_container_high.default.hex }};
+    --note-icon-background-color: {{ colors.surface_container_high.default.hex }};
+    --help-kbd-shortcut-background: {{ colors.surface_container_high.default.hex }};
+    --calendar-coll-event-background-color: {{ colors.surface_container_high.default.hex }};
+    --note-tooltip-background-color: {{ colors.surface_container_high.default.rgba | set_alpha 0.85 }};
+    --right-pane-peek-background: {{ colors.surface_container_high.default.rgba | set_alpha 0.85 }};
+    --floating-button-background-color: {{ colors.surface_container_high.default.rgba | set_alpha 0.82 }};
+    --accented-background-color: {{ colors.surface_container_highest.default.hex }};
+    --note-icon-hover-background-color: {{ colors.surface_container_highest.default.hex }};
+    --button-group-active-button-background-color: {{ colors.surface_container_highest.default.hex }};
+    --help-code-background: {{ colors.surface_container_highest.default.hex }};
+    --tooltip-background-color: {{ colors.surface_container_highest.default.rgba | set_alpha 0.9 }};
+    --toast-background: {{ colors.surface_container_highest.default.rgba | set_alpha 0.9 }};
+
+    /* 2. Text */
+    --main-text-color: {{ colors.on_surface.default.hex }};
+    --menu-text-color: {{ colors.on_surface.default.hex }};
+    --input-text-color: {{ colors.on_surface.default.hex }};
+    --hover-item-text-color: {{ colors.on_surface.default.hex }};
+    --active-tab-text-color: {{ colors.on_surface.default.hex }};
+    --left-pane-item-selected-color: var(--noctalia-on-accent);   /* like Noctalia's settings sidebar: solid primary */
+    --tooltip-foreground-color: {{ colors.on_surface.default.hex }};
+    --toast-text-color: {{ colors.on_surface.default.hex }};
+    --muted-text-color: {{ colors.on_surface_variant.default.hex }};
+    --left-pane-text-color: {{ colors.on_surface_variant.default.hex }};
+    --left-pane-icon-color: {{ colors.on_surface_variant.default.hex }};
+    --launcher-pane-horiz-text-color: {{ colors.on_surface_variant.default.hex }};
+    --launcher-pane-vert-text-color: {{ colors.on_surface_variant.default.hex }};
+    --menu-item-icon-color: {{ colors.on_surface_variant.default.hex }};
+    --note-icon-color: {{ colors.on_surface_variant.default.hex }};
+    --active-tab-icon-color: {{ colors.on_surface_variant.default.hex }};
+    --modal-title-color: {{ colors.on_surface_variant.default.hex }};
+    --right-pane-heading-color: {{ colors.on_surface_variant.default.hex }};
+    --inactive-tab-text-color: {{ colors.outline.default.hex }};
+
+    /* 3. Borders and lines */
+    --main-border-color: {{ colors.outline_variant.default.hex }};
+    --dropdown-border-color: {{ colors.outline_variant.default.hex }};
+    --subtle-border-color: {{ colors.surface_container_high.default.hex }};
+    --gutter-hover-color: {{ colors.outline.default.hex }};
+    --scrollbar-thumb-color: {{ colors.outline.default.rgba | set_alpha 0.7 }};
+    --scrollbar-thumb-hover-color: {{ colors.on_surface_variant.default.rgba | set_alpha 0.6 }};
+
+    /* 4. Accents */
+    --link-color: {{ colors.tertiary.default.hex }};
+    --link-hover-background: {{ colors.tertiary.default.rgba | set_alpha 0.14 }};
+    --link-selection-outline-color: {{ colors.tertiary.default.rgba | set_alpha 0.5 }};
+    --input-focus-outline-color: {{ colors.primary.default.rgba | set_alpha 0.6 }};
+    --selection-background-color: {{ colors.primary.default.rgba | set_alpha 0.35 }};
+    --left-pane-item-selected-background: var(--noctalia-accent);
+    --active-item-background-color: {{ colors.primary_container.default.hex }};
+    --quick-search-result-highlight-color: {{ colors.primary.default.hex }};
+    --quick-search-result-fuzzy-highlight-color: {{ colors.secondary.default.hex }};
+    --contextual-help-icon-color: {{ colors.tertiary.default.hex }};
+    --task-checkbox-done-color: {{ colors.primary.default.hex }};
+    --protected-session-active-icon-color: {{ colors.primary.default.hex }};
+    --global-menu-update-available-badge-background-color: {{ colors.primary.default.hex }};
+    --global-menu-update-available-badge-color: {{ colors.on_primary.default.hex }};
+
+    /* 5. Errors and destructive actions */
+    --tab-close-button-hover-background: {{ colors.error.default.hex }};
+    --tab-close-button-hover-color: {{ colors.on_error.default.hex }};
+    --dropdown-item-icon-destructive-color: {{ colors.error.default.hex }};
+    --task-checkbox-unknown-state-color: {{ colors.error.default.hex }};
+    --sync-status-error-pulse-color: {{ colors.error.default.hex }};
+    --board-limit-exceeded-background: {{ colors.error.default.hex }};
+    --badge-read-only-background-color: {{ colors.error_container.default.hex }};
+
+    /* 6. Search expression highlighting */
+    --search-keyword-color: {{ colors.terminal_normal_magenta.default.hex }};
+    --search-label-color: {{ colors.terminal_normal_blue.default.hex }};
+    --search-literal-color: {{ colors.terminal_normal_yellow.default.hex }};
+    --search-string-color: {{ colors.terminal_normal_green.default.hex }};
+    --search-negation-color: {{ colors.terminal_normal_red.default.hex }};
+    --search-property-color: {{ colors.terminal_normal_cyan.default.hex }};
+    --search-relation-color: {{ colors.terminal_bright_magenta.default.hex }};
+    --search-operator-color: {{ colors.outline.default.hex }};
+    --search-bracket-color: {{ colors.outline.default.hex }};
+
+    /* 7. Backdrop saturation
+     *    Next blurs whatever is behind menus with blur + saturate(6). Harmless on Next's gray backgrounds,
+     *    but on a tinted background it turns menus bright yellow and the like, so keep the blur only. */
+    --dropdown-backdrop-filter: blur(20px);
+    --opaque-icon-button-backdrop-filter: blur(32px);
+    --overlay-button-backdrop-filter: var(--opaque-icon-button-backdrop-filter);
+
+    /* 8. Active tab as solid primary (like the selected tab/button in Noctalia's settings). Delete this block to opt out */
+    --active-tab-background-color: var(--noctalia-accent);
+    --active-tab-hover-background-color: var(--noctalia-accent);
+    --active-tab-text-color: var(--noctalia-on-accent);
+    --active-tab-icon-color: var(--noctalia-on-accent);
+
+    /* 9. Alias variables
+     *    Next defines these on :root as var(--one-of-the-above). var() resolves on the element that declares it,
+     *    so on :root they keep Next's values. Re-declaring the same expressions here makes them follow the overrides.
+     *    Left alone because dark and light use different expressions: ck-editor-popup-border-color,
+     *    help-background-color, left-pane-item-action-button-color, floating-button-show-button-color.
+     *    input-hover-color is plain black in Next light; it follows the input text color here. */
+    --root-background: var(--left-pane-background-color);
+    --right-pane-background-color: var(--main-background-color);
+    --classic-toolbar-horiz-layout-background-color: var(--main-background-color);
+    --active-item-text-color: var(--left-pane-text-color);
+    --badge-text-color: var(--muted-text-color);
+    --input-hover-color: var(--input-text-color);
+    --select-dropdown-text-color: var(--input-text-color);
+    --select-focus-text-color: var(--input-text-color);
+    --icon-button-hover-color: var(--hover-item-text-color);
+    --opaque-icon-button-hover-color: var(--icon-button-hover-color);
+    --link-hover-color: var(--link-color);
+    --modal-close-button-hover-background: var(--tab-close-button-hover-background);
+    --launcher-pane-horiz-button-focus-outline-color: var(--input-focus-outline-color);
+    --launcher-pane-vert-button-focus-outline-color: var(--input-focus-outline-color);
+    --calendar-color: var(--menu-text-color);
+    --calendar-day-hover-background: var(--active-item-background-color);
+    --calendar-day-hover-color: var(--hover-item-text-color);
+    --calendar-weekday-labels-color: var(--muted-text-color);
+    --note-list-view-icon-color: var(--left-pane-icon-color);
+    --note-list-view-large-icon-background: var(--note-icon-background-color);
+    --note-list-view-large-icon-color: var(--note-icon-color);
+    --note-list-view-content-search-result-highlight-background: var(--quick-search-result-highlight-color);
+    --note-list-view-search-result-highlight-color: var(--quick-search-result-highlight-color);
+    --note-list-view-search-result-fuzzy-highlight-color: var(--quick-search-result-fuzzy-highlight-color);
+    --space-usage-donut-segment-color: var(--accented-background-color);
+    --space-usage-donut-segment-hover-color: var(--input-focus-outline-color);
+    --space-usage-donut-segment-selected-color: var(--main-text-color);
+    --space-usage-donut-track-color: var(--main-border-color);
+    --space-usage-treemap-cell-background: var(--accented-background-color);
+    --space-usage-treemap-cell-hover-color: var(--main-text-color);
+    --space-usage-treemap-cell-icon-color: var(--muted-text-color);
+    --space-usage-treemap-cell-selected-color: var(--main-text-color);
+
+    /* 9b. Alias variables from component stylesheets (:root / :where(:root) in boards, calendar, the right pane button, ...)
+     *     Same reason as 9. Collected mechanically from Trilium 0.106.0's CSS. */
+    --board-column-header-muted-text-color: var(--muted-text-color);
+    --board-column-header-text-color: var(--main-text-color);
+    --board-focus-outline-plain-color: var(--link-color);
+    --board-inbox-item-background: var(--card-background-color,var(--accented-background-color));
+    --board-muted-text-color: var(--muted-text-color);
+    --board-selected-ring-color: var(--link-color);
+    --board-selection-bar-background: var(--main-background-color);
+    --board-selection-wedge-color: var(--main-border-color);
+    --board-text-color: var(--main-text-color);
+    --bs-body-bg: var(--main-background-color);
+    --bs-body-color: var(--main-text-color);
+    --collection-filter-active-border-color: var(--main-text-color);
+    --collection-filter-background: var(--quick-search-background,var(--accented-background-color));
+    --collection-filter-button-hover-background: var(--left-pane-item-action-button-hover-background,var(--main-border-color));
+    --collection-filter-clear-background: var(--dropdown-item-icon-destructive-color,#de4027);
+    --collection-filter-clear-hover-background: color-mix(in srgb, var(--collection-filter-clear-background) 85%, black);
+    --collection-filter-color: var(--quick-search-color,var(--muted-text-color));
+    --collection-filter-error-background: var(--main-background-color);
+    --collection-filter-error-border-color: var(--main-border-color);
+    --collection-filter-focus-background: var(--quick-search-focus-background,var(--main-background-color));
+    --collection-filter-focus-border-color: var(--quick-search-focus-border,var(--main-border-color));
+    --collection-filter-focus-color: var(--quick-search-focus-color,var(--main-text-color));
+    --collection-filter-hover-background: var(--quick-search-hover-background,var(--accented-background-color));
+    --fc-forma-background: var(--main-background-color);
+    --fc-forma-background-event: var(--link-color);
+    --fc-forma-border: var(--main-border-color);
+    --fc-forma-event: var(--calendar-coll-event-text-color,var(--main-text-color));
+    --fc-forma-event-contrast: var(--calendar-coll-event-text-color,var(--main-text-color));
+    --fc-forma-faint: color-mix(in srgb, var(--main-text-color) 3%, transparent);
+    --fc-forma-faint-foreground: var(--muted-text-color);
+    --fc-forma-foreground: var(--main-text-color);
+    --fc-forma-highlight: color-mix(in srgb, var(--link-color) 35%, transparent);
+    --fc-forma-muted: color-mix(in srgb, var(--main-text-color) 7%, transparent);
+    --fc-forma-muted-border: var(--main-border-color);
+    --fc-forma-muted-foreground: var(--muted-text-color);
+    --fc-forma-primary: var(--main-text-color,#030712);
+    --fc-forma-primary-down: color-mix(in srgb, var(--fc-forma-primary) 70%, var(--main-background-color));
+    --fc-forma-primary-foreground: var(--main-background-color);
+    --fc-forma-primary-over: color-mix(in srgb, var(--fc-forma-primary) 85%, var(--main-background-color));
+    --fc-forma-strong: color-mix(in srgb, var(--main-text-color) 12%, transparent);
+    --fc-forma-strong-border: color-mix(in srgb, var(--main-text-color) 35%, transparent);
+    --fc-forma-stronger: color-mix(in srgb, var(--main-text-color) 16%, transparent);
+    --fc-forma-strongest: color-mix(in srgb, var(--main-text-color) 20%, transparent);
+    --item-picker-mark-color: var(--quick-search-result-highlight-color);
+    --link-preview-card-description-text-color: var(--muted-text-color);
+    --link-preview-card-image-background-color: var(--accented-background-color);
+    --link-preview-card-title-color: var(--link-color);
+    --link-preview-card-url-text-color: var(--muted-text-color);
+    --note-color-picker-clear-color-cell-color: var(--main-background-color);
+    --peek-button-arrow-color: var(--muted-text-color);
+    --peek-button-collapse-background-color: var(--right-pane-background-color);
+    --peek-button-expand-background-color: var(--note-split-background-color,var(--main-background-color));
+    --sortable-grip-color: var(--muted-text-color);
+    --sortable-grip-hover-color: var(--main-text-color);
+    --sortable-selected-color: var(--main-text-color);
+    --text-editor-collapsible-list-arrow-color: var(--muted-text-color);
+    --text-editor-collapsible-list-arrow-hover-color: var(--main-text-color);
+}
