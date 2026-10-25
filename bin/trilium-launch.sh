@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Trilium launcher wrapper (Exec of the user-level triliumnext.desktop).
+# Trilium launcher wrapper (Exec of the user-level .desktop entry placed by install.sh).
 #
-# 1. Reads the Exec line of the system triliumnext.desktop on every launch and starts Trilium with it
+# 1. Reads the Exec line of the system .desktop entry on every launch and starts Trilium with it
 #    (so a package update that changes the system Exec line is picked up automatically).
+#    The entry is triliumnext.desktop (AUR) or trilium.desktop (official .deb), searched in that order.
 # 2. Waits until Trilium answers, then runs push.sh once to catch up on color changes made while
 #    Trilium was closed. ETAPI only exists once Trilium is running, so if anything is pushed the window
 #    is already up and needs an F5 (push.sh sends a notification).
@@ -10,20 +11,22 @@
 set -u
 
 DIR="${TRILIUM_NOCTALIA_DIR:-$HOME/.config/noctalia/trilium}"
-DESKTOP_ID="triliumnext.desktop"
+DESKTOP_IDS=(triliumnext.desktop trilium.desktop)
 
 # Find the system .desktop entry (not the user-level override that points here)
 system_desktop=""
 IFS=: read -r -a data_dirs <<< "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-for d in "${data_dirs[@]}"; do
-    if [[ -r "$d/applications/$DESKTOP_ID" ]]; then
-        system_desktop="$d/applications/$DESKTOP_ID"
-        break
-    fi
+for id in "${DESKTOP_IDS[@]}"; do
+    for d in "${data_dirs[@]}"; do
+        if [[ -r "$d/applications/$id" ]]; then
+            system_desktop="$d/applications/$id"
+            break 2
+        fi
+    done
 done
 
 if [[ -z "$system_desktop" ]]; then
-    notify-send -a "Trilium" "Cannot start Trilium" "System $DESKTOP_ID not found" 2>/dev/null
+    notify-send -a "Trilium" "Cannot start Trilium" "No system ${DESKTOP_IDS[*]} found" 2>/dev/null
     exit 1
 fi
 

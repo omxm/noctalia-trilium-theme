@@ -43,7 +43,7 @@ The CSS has two layers:
 
 ## Requirements
 
-- Trilium desktop app (`triliumnext`)
+- Trilium desktop app (`triliumnext` from the AUR, or the official `.deb` from the Trilium releases)
 - Noctalia v5
 - `python3`, `curl`, `notify-send`, `wl-paste` (wl-clipboard)
 
@@ -75,8 +75,9 @@ The CSS has two layers:
   press **F5** (or Ctrl+R) in Trilium. An open window only picks up new CSS after a reload.
   (In Trilium 0.106 the reload shortcut is F5 / Ctrl+R, not Ctrl+Shift+R.)
 - **Changed it while Trilium was closed?** `install.sh` puts a launcher entry in
-  `~/.local/share/applications/triliumnext.desktop`. Launching Trilium from your launcher pushes the
-  latest colors once it is up, so you get the notification after the window appears -> F5.
+  `~/.local/share/applications/`, named after the system entry (`triliumnext.desktop` from the AUR or
+  `trilium.desktop` from the official `.deb`, searched in that order). Launching Trilium from your launcher
+  pushes the latest colors once it is up, so you get the notification after the window appears -> F5.
 - Nothing changed -> nothing is pushed and no notification.
 
 ## Editing the CSS
@@ -103,14 +104,15 @@ You keep the colors on a plain two-pane layout. This is per machine.
 |---|---|
 | `~/.config/noctalia/trilium/` | `machine.conf`, `host.conf`, `etapi-token`, `bin/`, `template.css`, `layout.css`, `generated.css` |
 | `~/.config/noctalia/trilium.toml` | the Noctalia user template |
-| `~/.local/share/applications/triliumnext.desktop` | launcher entry; reads the system entry's Exec line on every launch |
+| `~/.local/share/applications/triliumnext.desktop` or `trilium.desktop` | launcher entry (same name as the system entry); reads the system entry's Exec line on every launch |
 | `hosts/<name>.conf` (this folder, git-ignored) | ETAPI URL and theme note ID (never the token) |
 | Trilium | "Noctalia Themes" at the root, with "Noctalia (<name>)" under it |
 
 ## Uninstall
 
 ```sh
-rm ~/.config/noctalia/trilium.toml ~/.local/share/applications/triliumnext.desktop
+rm ~/.config/noctalia/trilium.toml
+rm -f ~/.local/share/applications/triliumnext.desktop ~/.local/share/applications/trilium.desktop
 rm -r ~/.config/noctalia/trilium
 ```
 

@@ -15,7 +15,8 @@
 #   3. Writes the ETAPI URL and the theme note ID to hosts/<name>.conf in this folder
 #   4. Copies the scripts, templates (color and layout) and settings to ~/.config/noctalia/trilium/
 #   5. Registers the Noctalia user template in ~/.config/noctalia/trilium.toml
-#   6. Places ~/.local/share/applications/triliumnext.desktop so launching Trilium re-pushes the latest CSS
+#   6. Places a user-level copy of the system .desktop entry (triliumnext.desktop from the AUR or trilium.desktop
+#      from the official .deb, same name) in ~/.local/share/applications/ so launching Trilium re-pushes the latest CSS
 #   7. Pushes the current CSS to the theme note (only if it changed). This is also how a layout-only change gets pushed
 
 set -euo pipefail
@@ -23,7 +24,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIR="$HOME/.config/noctalia/trilium"
 NOCTALIA_TOML="$HOME/.config/noctalia/trilium.toml"
-DESKTOP_USER="$HOME/.local/share/applications/triliumnext.desktop"
+DESKTOP_IDS=(triliumnext.desktop trilium.desktop)
 DESKTOP_MARK="X-Noctalia-Trilium=true"
 DEFAULT_ETAPI_URL="http://127.0.0.1:37840/etapi"
 TODAY="$(date +%Y%m%d)"
@@ -177,17 +178,21 @@ cmp -s "$tmp" "$NOCTALIA_TOML" 2>/dev/null || template_changed=1
 install_file "$tmp" "$NOCTALIA_TOML" 644
 
 # 6. Launcher entry (a copy of the system entry except Exec; the wrapper reads the system Exec on every launch)
+#    The user-level copy takes the system entry's name so that it replaces the system entry in launchers.
 system_desktop=""
 IFS=: read -r -a data_dirs <<< "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
-for d in "${data_dirs[@]}"; do
-    if [[ -r "$d/applications/triliumnext.desktop" ]]; then
-        system_desktop="$d/applications/triliumnext.desktop"
-        break
-    fi
+for id in "${DESKTOP_IDS[@]}"; do
+    for d in "${data_dirs[@]}"; do
+        if [[ -r "$d/applications/$id" ]]; then
+            system_desktop="$d/applications/$id"
+            break 2
+        fi
+    done
 done
 if [[ -z "$system_desktop" ]]; then
-    say "no system triliumnext.desktop found; skipping the launcher entry"
+    say "no system ${DESKTOP_IDS[*]} found; skipping the launcher entry"
 else
+    DESKTOP_USER="$HOME/.local/share/applications/${system_desktop##*/}"
     python3 -I - "$system_desktop" "$DIR/bin/trilium-launch.sh" "$DESKTOP_MARK" "$INSTALL_MARK" > "$tmp" <<'PY'
 import sys
 src, launcher, mark, install_mark = sys.argv[1:5]

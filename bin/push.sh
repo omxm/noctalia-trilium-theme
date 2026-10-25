@@ -19,8 +19,22 @@ set -u
 
 DIR="${TRILIUM_NOCTALIA_DIR:-$HOME/.config/noctalia/trilium}"
 
+# Notification icon: the Icon= of the system .desktop entry (triliumnext.desktop from the AUR or
+# trilium.desktop from the official .deb, searched in that order)
+ICON="trilium"
+IFS=: read -r -a data_dirs <<< "${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+for id in triliumnext.desktop trilium.desktop; do
+    for d in "${data_dirs[@]}"; do
+        if [[ -r "$d/applications/$id" ]]; then
+            ICON="$(sed -n 's/^Icon=//p' "$d/applications/$id" | head -n 1)"
+            ICON="${ICON:-trilium}"
+            break 2
+        fi
+    done
+done
+
 notify() {
-    notify-send -a "Trilium" -i triliumnext "$1" "${2:-}" 2>/dev/null || true
+    notify-send -a "Trilium" -i "$ICON" "$1" "${2:-}" 2>/dev/null || true
 }
 
 # Read KEY=VALUE settings (never sourced)
@@ -55,10 +69,10 @@ fi
 exec 9>"$DIR/.push.lock"
 flock -w 30 9 || exit 0
 
-python3 -I - "$ETAPI_URL" "$NOTE_ID" "$CSS" "$TOKEN_FILE" "$LAYOUT_CSS" <<'PY'
+python3 -I - "$ETAPI_URL" "$NOTE_ID" "$CSS" "$TOKEN_FILE" "$LAYOUT_CSS" "$ICON" <<'PY'
 import json, re, subprocess, sys, urllib.error, urllib.request
 
-base, note_id, css_path, token_path, layout_path = sys.argv[1:6]
+base, note_id, css_path, token_path, layout_path, icon = sys.argv[1:7]
 token = open(token_path).read().strip()
 css = open(css_path, encoding="utf-8").read()
 
@@ -71,7 +85,7 @@ if layout_path:
     content += "\n" + open(layout_path, encoding="utf-8").read()
 
 def notify(title, body=""):
-    subprocess.run(["notify-send", "-a", "Trilium", "-i", "triliumnext", title, body],
+    subprocess.run(["notify-send", "-a", "Trilium", "-i", icon, title, body],
                    stderr=subprocess.DEVNULL, check=False)
 
 def call(method, path, data=None, ctype="application/json"):
